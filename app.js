@@ -1,3 +1,4 @@
+const saveBtn = document.getElementById("save");
 const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
@@ -70,8 +71,10 @@ function onCanvasClick() {
 }
 
 function onDestroyClick() {
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  if (confirm("정말로 그림판 전체를 삭제하시겠습니까?")) {
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  }
 }
 
 function onEraserClick() {
@@ -86,7 +89,7 @@ function onFileChange(event) {
   const image = new Image();
   image.src = url;
   image.onload = function () {
-    ctx.drawImage(image, 0, 0, 300, 400);
+    ctx.drawImage(image, 200, 200, 400, 400);
     fileInput.value = null;
   };
 }
@@ -100,6 +103,14 @@ function onDoubleClick(event) {
     ctx.fillText(text, event.offsetX, event.offsetY);
     ctx.restore();
   }
+}
+
+function onSaveClick() {
+  const url = canvas.toDataURL();
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "myDrawing.png";
+  a.click();
 }
 
 canvas.addEventListener("dblclick", onDoubleClick);
@@ -118,3 +129,4 @@ modeBtn.addEventListener("click", onModeClick);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
+saveBtn.addEventListener("click", onSaveClick);

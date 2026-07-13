@@ -1,6 +1,19 @@
+@import "reset.css";
+
+body {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: gainsboro;
+  padding: 20px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
 canvas {
   width: 800px;
   height: 800px;
+  background-color: white;
   border: 5px solid black;
 }
 
@@ -10,8 +23,68 @@ body {
   align-items: center;
 }
 
+.btns {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.color-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 .color-option {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
+  border: 5px solid white;
+  transition: transform ease-in-out 0.1s;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
+
+input#color {
+  width: 40px;
+  height: 40px;
+  border-radius: 25%;
+  background-color: white;
+}
+
+button,
+label {
+  all: unset;
+  width: 200px;
+  padding: 10px 0px;
+  text-align: center;
+  background-color: #e2889c;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: opacity linear 0.3s;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+input#file {
+  display: none;
+}
+
+input#text {
+  all: unset;
+  width: 200px;
+  padding: 10px 0px;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: 500;
+  text-align: center;
+  background-color: white;
 }
