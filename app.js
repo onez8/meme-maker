@@ -1,4 +1,8 @@
+const fontFamily = document.getElementById("font-family");
+const fontSize = document.getElementById("font-size");
 const saveBtn = document.getElementById("save");
+const undoBtn = document.getElementById("undo-btn");
+const redoBtn = document.getElementById("redo-btn");
 const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
@@ -13,10 +17,15 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 800;
+const MAX_SIZE = 400;
 canvas.width = 800;
 canvas.height = 800;
-ctx.linewidth = lineWidth.value;
+ctx.lineWidth = lineWidth.value;
+ctx.fontSize = fontSize.value;
 ctx.lineCap = "round";
+canvas.style.cursor = 'url("pencil.png"), auto';
+const history = [];
+let historyIndex = -1;
 let isPainting = false;
 let isFilling = false;
 
@@ -58,9 +67,11 @@ function onModeClick() {
   if (isFilling) {
     isFilling = false;
     modeBtn.innerText = "Fill";
+    canvas.style.cursor = 'url("pencil.png"), auto';
   } else {
     isFilling = true;
     modeBtn.innerText = "Draw";
+    canvas.style.cursor = 'url("bucket.png"), auto';
   }
 }
 
@@ -89,7 +100,18 @@ function onFileChange(event) {
   const image = new Image();
   image.src = url;
   image.onload = function () {
-    ctx.drawImage(image, 200, 200, 400, 400);
+    let width;
+    let height;
+    if (image.width > image.height) {
+      width = MAX_SIZE;
+      height = image.height * (MAX_SIZE / image.width);
+    } else {
+      width = image.width * (MAX_SIZE / image.height);
+      height = MAX_SIZE;
+    }
+    const x = (CANVAS_WIDTH - width) / 2;
+    const y = (CANVAS_HEIGHT - height) / 2;
+    ctx.drawImage(image, x, y, width, height);
     fileInput.value = null;
   };
 }
@@ -99,7 +121,7 @@ function onDoubleClick(event) {
   if (text !== "") {
     ctx.save();
     ctx.lineWidth = 1;
-    ctx.font = "48px serif";
+    ctx.font = `${fontSize.value}px ${fontFamily.value}`;
     ctx.fillText(text, event.offsetX, event.offsetY);
     ctx.restore();
   }
@@ -111,6 +133,27 @@ function onSaveClick() {
   a.href = url;
   a.download = "myDrawing.png";
   a.click();
+}
+
+function saveState() {
+  history.splice(historyIndex + 1);
+  const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  history.push(imageData);
+  historyIndex++;
+}
+
+function undo() {
+  if (historyIndex > 0) {
+    historyIndex--;
+    ctx.putImageData(history[historyIndex], 0, 0);
+  }
+}
+
+function redo() {
+  if (historyIndex < history.length - 1) {
+    historyIndex++;
+    ctx.putImageData(history[historyIndex], 0, 0);
+  }
 }
 
 canvas.addEventListener("dblclick", onDoubleClick);
@@ -130,3 +173,5 @@ destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
+undoBtn.addEventListener("click", undo);
+redoBtn.addEventListener("click", redo);

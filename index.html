@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meme Maker</title>
+    <title>예지니 그림판</title>
+    <script
+      src="https://kit.fontawesome.com/05031d89cd.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -61,16 +65,37 @@
       ></div>
     </div>
     <canvas></canvas>
+
     <div class="btns">
+      <div class="icon-btn">
+        <button id="undo-btn">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button id="redo-btn">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
       <input id="line-width" type="range" min="5" max="20" value="12" />
       <button id="mode-btn">Fill</button>
       <button id="destroy-btn">Destroy</button>
       <button id="eraser-btn">Eraser</button>
+      <input id="font-size" type="range" min="20" max="100" value="50" />
+      <label for="font-family">
+        <select id="font-family" name="font">
+          <option selected disabled>Choose a font</option>
+          <option value="serif">Serif</option>
+          <option value="sans-serif">Sans Serif</option>
+          <option value="monospace">Monospace</option>
+          <option value="Arial">Arial</option>
+          <option value="Georgia">Georgia</option>
+          <option value="cursive">Cursive</option>
+        </select>
+      </label>
+      <input type="text" placeholder="Add text here..." id="text" />
       <label for="file">
         Add Photo
         <input type="file" accept="image/*" id="file" />
       </label>
-      <input type="text" placeholder="Add text here..." id="text" />
       <button id="save">Save image</button>
     </div>
     <script src="app.js"></script>
