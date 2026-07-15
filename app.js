@@ -21,13 +21,13 @@ const MAX_SIZE = 400;
 canvas.width = 800;
 canvas.height = 800;
 ctx.lineWidth = lineWidth.value;
-ctx.fontSize = fontSize.value;
 ctx.lineCap = "round";
 canvas.style.cursor = 'url("pencil.png"), auto';
 const history = [];
 let historyIndex = -1;
 let isPainting = false;
 let isFilling = false;
+saveState();
 
 function onMove(event) {
   if (isPainting) {
@@ -45,6 +45,7 @@ function startPainting() {
 
 function cancelPainting() {
   isPainting = false;
+  saveState();
 }
 
 function onLineWidthChange(event) {
@@ -78,6 +79,7 @@ function onModeClick() {
 function onCanvasClick() {
   if (isFilling) {
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    saveState();
   }
 }
 
@@ -85,6 +87,7 @@ function onDestroyClick() {
   if (confirm("정말로 그림판 전체를 삭제하시겠습니까?")) {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    saveState();
   }
 }
 
@@ -113,6 +116,7 @@ function onFileChange(event) {
     const y = (CANVAS_HEIGHT - height) / 2;
     ctx.drawImage(image, x, y, width, height);
     fileInput.value = null;
+    saveState();
   };
 }
 
@@ -125,6 +129,7 @@ function onDoubleClick(event) {
     ctx.fillText(text, event.offsetX, event.offsetY);
     ctx.restore();
   }
+  saveState();
 }
 
 function onSaveClick() {
